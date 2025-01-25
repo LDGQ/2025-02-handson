@@ -2,18 +2,22 @@
 
 import React, {Dispatch, SetStateAction, useState} from 'react';
 import { PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
+import {Cart} from "@/app/interface/cart";
+import { useCart } from '@/app/context/CartContext';
+import {usePopupContext} from "@/app/context/PopupContext";
 
 interface PaymentProps {
     customerId: string;
-    setClientSecret: Dispatch<SetStateAction<string>>;
-    products: Record<string, any>;
+    setClientSecret: Dispatch<SetStateAction<string>> ;
 }
 
-const Payment: React.FC<PaymentProps> = ({ customerId, setClientSecret, products }) => {
+const Payment: React.FC<PaymentProps> = ({ customerId, setClientSecret }) => {
+    const {cart, setCart} = useCart();
     const stripe = useStripe();
     const elements = useElements();
     const [isProcessing, setIsProcessing] = useState(false);
     const [message, setMessage] = useState<string | null>(null);
+    const { openPopup } = usePopupContext();
 
     const handlePayment = async () => {
         if (!stripe || !elements) {
@@ -33,6 +37,7 @@ const Payment: React.FC<PaymentProps> = ({ customerId, setClientSecret, products
         } else if (paymentIntent) {
             setMessage('Payment succeeded!');
 
+            const products = cart.getDetail();
             const response = await fetch('/api/invoices', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -40,6 +45,7 @@ const Payment: React.FC<PaymentProps> = ({ customerId, setClientSecret, products
             });
             // componentを閉じる
             setClientSecret('');
+            openPopup('購入が完了しました！');
 
             const pdfUrl = await response.json();
             // email がない場合は、請求書を発行できないので、そのまま終了をする
@@ -64,13 +70,14 @@ const Payment: React.FC<PaymentProps> = ({ customerId, setClientSecret, products
         <div className="flex flex-col items-center">
             <button
                 onClick={() => {
+                    setCart(new Cart())
                     setClientSecret('');
                 }}
                 className="hover:bg-gray-100 px-4 py-2 mb-4"
             >
                 戻る
             </button>
-            
+
             <PaymentElement />
             <button
                 onClick={handlePayment}

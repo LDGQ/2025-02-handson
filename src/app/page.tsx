@@ -1,43 +1,35 @@
 "use client";
 
-import React, {useMemo, useState} from "react";
+import React, {useEffect, useMemo, useState} from "react";
+import {Product} from "@/app/interface/product";
 import Payment from "@/app/component/payment/page";
 import {Elements} from "@stripe/react-stripe-js";
+import ProductList from "@/app/component/product_list/page";
+import Loading from '@/app/component/loading/page';
 import {loadStripe} from "@stripe/stripe-js";
 import {useAuth} from "@/app/context/AuthContext";
+import Popup from "@/app/component/context/Popup";
+import {PopupProvider} from "@/app/context/PopupContext";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
 export default function Home() {
     const { customer } = useAuth();
+    const [loading, setLoading] = useState(true);
+    const [products, setProducts] = useState<Product[]>([]);    // 商品一覧
     const [clientSecret, setClientSecret] = useState('');   // 支払い情報
 
-    /** 商品を作成 **/
-    const products = [{
-            name: 'test',
-            currency: 'jpy',
-            amount: 100
-        }];
-
-    // 商品購入
-    const handlePurchase = () => {
-        createPaymentIntent(products[0].amount, products[0].currency, {}).then();
-    };
-
-    // 支払い情報を作成
-    const createPaymentIntent = async (amount: number, currency: string, metadata: object) => {
-        try {
-            const response = await fetch('/api/payment-intents', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ amount, currency, customer, metadata }),
-            });
+    useEffect(() => {
+        // 商品一覧を取得
+        fetch('/api/product-list', {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+        }).then(async (response) => {
             const result = await response.json();
-            setClientSecret(result.client_secret);
-        } catch (error) {
-            console.error('Error creating payment intent:', error);
-        }
-    };
+            setProducts(result);
+            setLoading(false);
+        });
+    }, []);
 
     const pageContent = useMemo(() => {
         // 支払い方法を定義
@@ -45,38 +37,26 @@ export default function Home() {
             clientSecret,
         };
 
+        // ローディング画面
+        if (loading) return <Loading />;
+
         // 支払い画面
         if (clientSecret) {
             return (
                 <Elements stripe={stripePromise} options={paymentOptions}>
-                    <Payment customerId={customer!.id} setClientSecret={setClientSecret} products={products} />
+                    <Payment customerId={customer!.id} setClientSecret={setClientSecret} />
                 </Elements>
             );
         }
 
-        return (
-            <div className="flex flex-col items-center p-4 gap-2">
-                <div className="px-4 py-2">
-                    <button
-                        onClick={() => handlePurchase()}
-                        className="
-                        bg-blue-500 text-white font-semibold px-6 py-2 rounded shadow
-                        hover:bg-blue-600 focus:outline-none focus:ring-2
-                        focus:ring-blue-500 focus:ring-offset-2 transition duration-150 ease-in-out
-                        disabled:bg-gray-300 disabled:cursor-not-allowed
-                    "
-                    >
-                        購入
-                    </button>
-                </div>
-            </div>
-        );
-
-    }, [clientSecret, customer]);
+        // 商品一覧画面
+        return <ProductList customer={customer!} products={products} setClientSecret={setClientSecret} />;
+    }, [loading, clientSecret, customer, products]);
 
     return (
-        <div>
+        <PopupProvider>
+            <Popup />
             {pageContent}
-        </div>
+        </PopupProvider>
     );
 }
