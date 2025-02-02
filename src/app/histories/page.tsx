@@ -49,6 +49,20 @@ const Histories: React.FC<HistoriesProps> = () => {
         }
     }, []);
 
+    // PDFダウンロード
+    const downloadReceipt = async (receiptUrl: string, receipt_number: string) => {
+        setLoading(true);
+        fetch('/api/download-receipt', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ receiptUrl: receiptUrl, receipt_number: receipt_number }),
+        }).then(async(response) => {
+            console.log((await response.json()));
+        }).finally(() => {
+            setLoading(false);
+        });
+    }
+
     const fetchProducts = (id: string) => {
         if(products.length === 0) return;
         return products.find((product) => product.id === id);
@@ -71,6 +85,7 @@ const Histories: React.FC<HistoriesProps> = () => {
                 <th className="border border-gray-300 px-4 py-2">合計金額</th>
                 <th className="border border-gray-300 px-4 py-2">状態</th>
                 <th className="border border-gray-300 px-4 py-2">詳細</th>
+                <th className="border border-gray-300 px-4 py-2">領収書</th>
             </tr>
             </thead>
             <tbody>
@@ -88,6 +103,21 @@ const Histories: React.FC<HistoriesProps> = () => {
                                 </p>
                             );
                         })}
+                    </td>
+                    <td className="px-4 py-2">
+                        {charge.amount_refunded ?
+                            <div>-</div>
+                            : <div className="flex gap-2">
+                                {/*Todo 開発環境だとメールが自動送信されないらしい・・・*/}
+                                {/*https://support.stripe.com/questions/why-did-stripe-not-send-an-email-receipt-for-my-successfully-paid-invoice?locale=ja-JP*/}
+                                <button
+                                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                    onClick={async () => {
+                                        await downloadReceipt(charge.receipt_url, charge.receipt_number);
+                                    }}>PDFダウンロード
+                                </button>
+                            </div>
+                        }
                     </td>
                 </tr>
             ))}
