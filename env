@@ -1,0 +1,10 @@
+// .local.envにファイル名を変更する
+
+// Stripeの秘密鍵を登録(サーバー側で使用)
+STRIPE_SECRET_KEY=
+
+// Stripeの公開鍵を登録(画面側で使用)
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=
+
+// LIFFのID(LINEログインで使用)
+NEXT_PUBLIC_LIFF_ID=
