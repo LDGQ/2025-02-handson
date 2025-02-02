@@ -30,17 +30,17 @@ const ProductList: React.FC<ProductListProps> = ({ customer, products, setClient
     // 商品購入
     const handlePurchase = () => {
         if (cart.totalAmount()) {
-            createPaymentIntent(cart.totalAmount(), 'jpy').then();
+            createPaymentIntent(cart.totalAmount(), 'jpy', cart.getMetadata()).then();
         }
     };
 
     // 支払い情報を作成
-    const createPaymentIntent = async (amount: number, currency: string) => {
+    const createPaymentIntent = async (amount: number, currency: string, metadata: object) => {
         try {
             const response = await fetch('/api/payment-intents', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ amount, currency, customer }),
+                body: JSON.stringify({ amount, currency, customer, metadata }),
             });
             console.log(response);
             const result = await response.json();

@@ -60,4 +60,13 @@ export class Cart {
     totalAmount(): number {
         return this.items.reduce((sum: number, item: CartItem) => sum + item.amount * item.count, 0);
     }
+
+    getMetadata(): Record<string, string> {
+        return this.items
+            .filter((item: CartItem) => item.count > 0)
+            .reduce((acc: Record<string, string>, item: CartItem) => {
+            acc[item.productId] = JSON.stringify({ price: item.amount, count: item.count});
+            return acc;
+        }, {} as Record<string, string>)
+    }
 }
