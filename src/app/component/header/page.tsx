@@ -14,7 +14,7 @@ const Header: React.FC = () => {
                 <ul className="flex space-x-4">
                     <li><Link href="/" className="hover:underline">ホーム</Link></li>
                     {/* Step2 */}
-                    {/* <li><Link href="/histories" className="hover:underline">履歴</Link></li> */}
+                    <li><Link href="/histories" className="hover:underline">履歴</Link></li>
                 </ul>
                 {
                     profile && (
