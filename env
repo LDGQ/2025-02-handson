@@ -1,0 +1,12 @@
+// .local.envにファイル名を変更する
+// server side keys
+// https://dashboard.stripe.com/test/apikeys
+STRIPE_SECRET_KEY=
+// https://developers.line.biz/console
+LINE_BOT_CHANNEL_ACCESS_TOKEN=
+
+// frontend keys
+// https://dashboard.stripe.com/test/apikeys
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=
+// https://developers.line.biz/console
+NEXT_PUBLIC_LIFF_ID=
