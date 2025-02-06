@@ -17,8 +17,8 @@ const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
 export default function Home() {
     const { customer } = useAuth();
     // Step7
-    // const { clientSecret } = useCart();
-    const { clientSecret } = useAuth();
+    const { clientSecret } = useCart();
+    // const { clientSecret } = useAuth();
     const [loading, setLoading] = useState(true);
     const [products, setProducts] = useState<Product[]>([]);    // 商品一覧
 

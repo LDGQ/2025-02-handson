@@ -38,13 +38,13 @@ const ProductList: React.FC<ProductListProps> = ({ customer, products }) => {
     };
 
     // 商品購入
-    const handlePurchase = (product: Product) => {
-        purchase(product);
-    };
-    // Step7
-    // const handlePurchase = () => {
-    //     parchaseCart(customer);
+    // const handlePurchase = (product: Product) => {
+    //     purchase(product);
     // };
+    // Step7
+    const handlePurchase = () => {
+        parchaseCart(customer);
+    };
 
     return (
         <div className="flex flex-col items-center p-4 gap-2">
@@ -74,7 +74,7 @@ const ProductList: React.FC<ProductListProps> = ({ customer, products }) => {
                         <td className="px-4 py-2">
                             {product.prices[0].unit_amount.toLocaleString()}円
                         </td>
-                        <td className="px-4 py-2">
+                        {/* <td className="px-4 py-2">
                             <button
                                 onClick={() => handlePurchase(product)}
                                 className="
@@ -85,9 +85,9 @@ const ProductList: React.FC<ProductListProps> = ({ customer, products }) => {
                             >
                                 購入
                             </button>
-                        </td>
+                        </td> */}
                         {/* Step7 */}
-                        {/* <td className="px-4 py-2">
+                        <td className="px-4 py-2">
                             <select
                                 value={cart.getCount(product)}
                                 onChange={(e) => handleCartAdd(product, Number(e.target.value))}
@@ -99,13 +99,13 @@ const ProductList: React.FC<ProductListProps> = ({ customer, products }) => {
                                     </option>
                                 ))}
                             </select>
-                        </td> */}
+                        </td>
                     </tr>
                 ))}
                 </tbody>
             </table>
             {/* Step7 */}
-            {/* <div className="max-w-md mx-auto bg-white shadow-md rounded-lg p-6">
+            <div className="max-w-md mx-auto bg-white shadow-md rounded-lg p-6">
                 <div className="flex justify-between items-center mb-4">
                     <span className="text-gray-700 text-sm">商品の小計：</span>
                     <span className="text-gray-900 text-sm font-medium">{cart.totalAmount()}円</span>
@@ -132,7 +132,7 @@ const ProductList: React.FC<ProductListProps> = ({ customer, products }) => {
                 >
                 購入
                 </button>
-            </div> */}
+            </div>
         </div>
     );
 }

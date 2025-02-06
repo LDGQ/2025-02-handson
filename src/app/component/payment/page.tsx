@@ -8,8 +8,8 @@ import { useAuth } from '@/app/context/AuthContext';
 
 const Payment: React.FC = () => {
     // Step7
-    // const {resetCart} = useCart();
-    const {setClientSecret} = useAuth();
+    const {resetCart} = useCart();
+    // const {setClientSecret} = useAuth();
     const stripe = useStripe();
     const elements = useElements();
     const [isProcessing, setIsProcessing] = useState(false);
@@ -33,8 +33,8 @@ const Payment: React.FC = () => {
             } else if (paymentIntent) {
                 setMessage('Payment succeeded!');
                 // Step7
-                setClientSecret();
-                // resetCart();
+                // setClientSecret();
+                resetCart();
                 openPopup('購入が完了しました！');
             }
         })
@@ -51,8 +51,8 @@ const Payment: React.FC = () => {
         <div className="flex flex-col items-center">
             <button
                 // Step7
-                onClick={setClientSecret}
-                // onClick={resetCart}
+                // onClick={setClientSecret}
+                onClick={resetCart}
                 className="hover:bg-gray-100 px-4 py-2 mb-4"
             >
                 戻る
