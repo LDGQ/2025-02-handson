@@ -108,7 +108,7 @@ const Histories: React.FC<HistoriesProps> = () => {
                     <th className="border border-gray-300 px-4 py-2">状態</th>
                     <th className="border border-gray-300 px-4 py-2">詳細</th>
                     {/* Step3 */}
-                    {/* <th className="border border-gray-300 px-4 py-2">返金</th> */}
+                    <th className="border border-gray-300 px-4 py-2">返金</th>
                     {/* Step4 */}
                     {/* <th className="border border-gray-300 px-4 py-2">領収書</th> */}
                 </tr>
@@ -130,7 +130,7 @@ const Histories: React.FC<HistoriesProps> = () => {
                         })}
                     </td>
                     {/* Step3 */}
-                    {/* <td className="border px-4 py-2">
+                    <td className="border px-4 py-2">
                         <div className='flex justify-between items-center'>
                             <p>{charge.amount_refunded == 0 ? 'なし' : 'あり'}</p>
                             <p>
@@ -146,7 +146,7 @@ const Histories: React.FC<HistoriesProps> = () => {
                                     </>
                                 }</p>
                         </div>
-                    </td> */}
+                    </td>
                     {/* Step4 */}
                     {/* <td className="px-4 py-2">
                         {charge.amount_refunded ?
