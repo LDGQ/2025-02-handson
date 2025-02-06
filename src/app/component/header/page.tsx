@@ -20,7 +20,7 @@ const Header: React.FC = () => {
                     profile && (
                         <div className="flex items-center space-x-2">
                             {/* Step5 */}
-                            {/* <img src={profile.pictureUrl} alt="User Icon" className="w-8 h-8 rounded-full" /> */}
+                            <img src={profile.pictureUrl} alt="User Icon" className="w-8 h-8 rounded-full" />
                             <span className="font-medium">{profile.displayName}</span>
                         </div>
                     )
